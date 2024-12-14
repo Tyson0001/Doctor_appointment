@@ -60,7 +60,7 @@ const NotificationPage = () => {
     } catch (error) {
       dispatch(hideLoading());
       console.log(error);
-      message.error("Somthing Went Wrong In Ntifications");
+      message.error("Somthing Went Wrong In Notifications");
     }
   };
   return (
@@ -86,9 +86,20 @@ const NotificationPage = () => {
 
     <Tabs.TabPane tab='Read' key= {1}>
         <div className='d-flex justify-content-end'>
-            <h4 className='p-2' onClick={handleDeleteAllRead}>Delete All Read </h4>
+            <h4 className='p-2 text-primary' style={{cursor:"pointer"}} 
+            onClick={handleDeleteAllRead}>Delete All Read </h4>
 
         </div>
+        {user?.seennotification.map((notificationMgs) => (
+            <div className="card" style={{ cursor: "pointer" }}>
+              <div
+                className="card-text"
+                onClick={() => navigate(notificationMgs.onClickPath)}
+              >
+                {notificationMgs.message}
+              </div>
+            </div>
+          ))}
     </Tabs.TabPane>
    </Tabs>
    

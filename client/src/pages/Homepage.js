@@ -1,44 +1,41 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
-import Layout from "../components/Layout";
-
-const Homepage = () => {
-  // Fetch user data
+import Layout from "./../components/Layout";
+import { Row } from "antd";
+import DoctorList from "../components/DoctorList";
+const HomePage = () => {
+  const [doctors, setDoctors] = useState([]);
+  // login user data
   const getUserData = async () => {
     try {
-      const res = await axios.post(
-        "/api/v1/user/getUserData", // Backend API endpoint
-        {}, // Request body (if needed)
+      const res = await axios.get(
+        "/api/v1/user/getAllDoctors",
+
         {
           headers: {
-            Authorization: "Bearer " + localStorage.getItem("token"), // Pass the token
+            Authorization: "Bearer " + localStorage.getItem("token"),
           },
         }
       );
-
-      // Debugging: Log the response data
-      console.log("User Data:", res.data);
+      if (res.data.success) {
+        setDoctors(res.data.data);
+      }
     } catch (error) {
-      // Handle error
-      console.error(
-        error.response
-          ? error.response.data
-          : "Error occurred while fetching user data"
-      );
+      console.log(error);
     }
   };
 
-  // Call getUserData on component load
   useEffect(() => {
     getUserData();
   }, []);
-
   return (
     <Layout>
-      <h1>Homepage</h1>
-      <p>Welcome to the homepage!</p>
+      <h1 className="text-center">Home Page</h1>
+      <Row>
+        {doctors && doctors.map((doctor) => <DoctorList doctor={doctor} />)}
+      </Row>
     </Layout>
   );
 };
 
-export default Homepage;
+export default HomePage;

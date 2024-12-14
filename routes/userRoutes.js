@@ -3,26 +3,59 @@ const {
   loginController,
   registerController,
   authController,
-  applyDoctorController, 
+  applyDoctorController,
   getAllNotificationController,
+  deleteAllNotificationController,
+  getAllDocotrsController,
+  bookeAppointmnetController,
+  bookingAvailabilityController,
+  userAppointmentsController,
 } = require("../controllers/userCtrl");
-const authMiddlewares = require("../middlewares/authMiddlewares");
+const authMiddleware = require("../middlewares/authMiddlewares");
 
+//router onject
 const router = express.Router();
 
-// User login route
+//routes
+//LOGIN || POST
 router.post("/login", loginController);
 
-// User registration route
+//REGISTER || POST
 router.post("/register", registerController);
 
-// Fetch user data (Protected route)
-router.post("/getUserData", authMiddlewares, authController);
+//Auth || POST
+router.post("/getUserData", authMiddleware, authController);
 
 //APply Doctor || POST
-router.post("/apply-doctor", authMiddlewares, applyDoctorController);
+router.post("/apply-doctor", authMiddleware, applyDoctorController);
 
-//APply Doctor || POST
-router.post("/get-all-notification", authMiddlewares, getAllNotificationController);
+//Notifiaction  Doctor || POST
+router.post(
+  "/get-all-notification",
+  authMiddleware,
+  getAllNotificationController
+);
+//Notifiaction  Doctor || POST
+router.post(
+  "/delete-all-notification",
+  authMiddleware,
+  deleteAllNotificationController
+);
+
+//GET ALL DOC
+router.get("/getAllDoctors", authMiddleware, getAllDocotrsController);
+
+//BOOK APPOINTMENT
+router.post("/book-appointment", authMiddleware, bookeAppointmnetController);
+
+//Booking Avliability
+router.post(
+  "/booking-availbility",
+  authMiddleware,
+  bookingAvailabilityController
+);
+
+//Appointments List
+router.get("/user-appointments", authMiddleware, userAppointmentsController);
 
 module.exports = router;
