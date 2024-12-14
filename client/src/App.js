@@ -1,16 +1,55 @@
-import {BrowserRouter,Routes,Route} from 'react-router-dom';
-import Homepage from './pages/Homepage.js';
-import Login from './pages/Login.js';
-import Register from './pages/Register.js';
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Homepage from "./pages/Homepage.js";
+import Login from "./pages/Login.js";
+import Register from "./pages/Register.js";
+import { useSelector } from "react-redux";
+import Spinner from "./components/Spinner.js";
+import ProtectedRoute from "./components/ProtectedRoute.js";
+import PublicRoute from "./components/PublicRoute.js";
+import ApplyDoctor from "./pages/ApplyDoctor.js";
 function App() {
+  const { loading } = useSelector((state) => state.alerts);
   return (
     <>
       <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Homepage />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-        </Routes>
+        {loading ? (
+          <Spinner />
+        ) : (
+          <Routes>
+            <Route
+              path="/"
+              element={
+                <ProtectedRoute>
+                  <Homepage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/apply-doctor"
+              element={
+                <ProtectedRoute>
+                  <ApplyDoctor />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/login"
+              element={
+                <PublicRoute>
+                  <Login />
+                </PublicRoute>
+              }
+            />
+            <Route
+              path="/register"
+              element={
+                <PublicRoute>
+                  <Register />
+                </PublicRoute>
+              }
+            />
+          </Routes>
+        )}
       </BrowserRouter>
     </>
   );

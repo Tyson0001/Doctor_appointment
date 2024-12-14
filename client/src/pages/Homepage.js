@@ -1,10 +1,11 @@
-import react,{useEffect} from "react";
+import react, { useEffect } from "react";
 import axios from "axios";
+import Layout from "../components/Layout";
 const Homepage = () => {
   //login user data
   const getUserData = async () => {
     try {
-        await axios.get(
+      const res = await axios.get(
         "/api/v1/user/getUserData",
 
         {
@@ -13,20 +14,19 @@ const Homepage = () => {
           },
         }
       );
-    } 
-    catch (error) {
+    } catch (error) {
       console.log(error);
     }
   };
-  
+
   useEffect(() => {
     getUserData();
   }, []);
 
   return (
-    <div>
-      <h1>Home page</h1>
-    </div>
+    <Layout>
+      <h1>Homepage</h1>
+    </Layout>
   );
 };
 
