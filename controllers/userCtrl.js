@@ -3,7 +3,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const doctorModel = require("../models/doctorModel")
 //LOGIN
-const loginController = async (req, res) => {
+const loginController = async (req, res) => { 
   try {
     const user = await userModel.findOne({ email: req.body.email });
     if (!user) {
@@ -105,6 +105,32 @@ const applyDoctorController = async(req, res) => {
   }
 };
 
+// notification controller
+const getAllNotificationController = async(req,res) => {
+  try {
+    const user = await userModel.findOne({_id:req.body.userId});
+    const notification = user.notification;
+    const seennotification = user.seennotification;
+    seennotification.push(...notification);
+    user.notification = [];
+    user.seennotification = notification;
+    const updatedUser = await user.save();
+    res.status(200).send({
+      message:"Notifications Marked as seen",
+      success:true,
+      data:updatedUser,
+     })
+}
+   catch (error) {
+    console.log(error);
+    res.status(500).send({
+      message: "Error in getting notification",
+      success: false,
+      error,
+    });
+  }
+}
+
  
 module.exports = {
   loginController,
@@ -112,4 +138,5 @@ module.exports = {
   registerController,
   authController,
   applyDoctorController,
+  getAllNotificationController,
 };
