@@ -1,21 +1,24 @@
-const express = require('express');
+const express = require("express");
+const {
+  loginController,
+  registerController,
+  authController,
+  applyDoctorController, 
+} = require("../controllers/userCtrl");
+const authMiddlewares = require("../middlewares/authMiddlewares");
 
-const colors = require('colors');
-const { loginController,registerController,authController } = require('../controllers/userCtrl');
-const authMiddlewares = require('../middlewares/authMiddlewares');
-
-// routes injection
 const router = express.Router();
 
-//routes
-// login || Post
+// User login route
+router.post("/login", loginController);
 
-router.post('/login', loginController);
+// User registration route
+router.post("/register", registerController);
 
-// register
-router.post('/register', registerController);
+// Fetch user data (Protected route)
+router.post("/getUserData", authMiddlewares, authController);
 
+//APply Doctor || POST
+router.post("/apply-doctor", authMiddlewares, applyDoctorController);
 
-//auth||post
-router.post('/getUserData',authMiddlewares,authController)
-module.exports = router
+module.exports = router;

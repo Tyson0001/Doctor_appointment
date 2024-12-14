@@ -1,6 +1,7 @@
 const userModel = require("../models/userModels");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const doctorModel = require("../models/doctorModel")
 //LOGIN
 const loginController = async (req, res) => {
   try {
@@ -76,9 +77,39 @@ const authController = async (req, res) => {
     });
   }
 };
+
+const applyDoctorController = async(req, res) => {
+  try {
+    const newDoctor = await new doctorModel({...req.body,status:"pending"});
+    await newDoctor.save();
+    const adminUser = await userModel.findOne({isAdmin:true});
+    const notification = adminUser.notification;
+    notification.push({
+      type:"apply-doctor-request",
+      message: `${newDoctor.firstName} ${newDoctor.lastName} has applied for doctor`,
+      data:{
+        doctorId:newDoctor._id,
+        name:newDoctor.firstName+" "+newDoctor.lastName,
+        onClickPath:"/admin/doctors"
+      }
+    });
+    await userModel.findByIdAndUpdate(adminUser._id,{notification});
+    res.status(201).send({message:"Doctor Application Submitted",success:true});
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      message: "Error in applying Doctor",
+      success: false,
+      error,
+    });
+  }
+};
+
+ 
 module.exports = {
   loginController,
   logoutController,
   registerController,
   authController,
+  applyDoctorController,
 };

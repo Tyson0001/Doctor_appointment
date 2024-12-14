@@ -1,20 +1,22 @@
 import React from "react";
 import "../styles/LayoutStyles.css";
-import { SidebarMenu } from "../Data/data";
-import { message } from "antd";
+import { message,Badge, Avatar } from "antd";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { adminMenu, userMenu } from "../Data/data.js";
+
 const Layout = ({ children }) => {
   const { user } = useSelector((state) => state.user);
   const location = useLocation();
   const navigate = useNavigate();
+
   const handleLogout = () => {
     localStorage.clear();
-    message.success("Log Out Successfully");
+    message.success("Logged Out Successfully");
     navigate("/login");
   };
-  // redering menu list
+
+  // Rendering menu list based on user type
   const SidebarMenu = user?.isAdmin ? adminMenu : userMenu;
 
   return (
@@ -27,27 +29,28 @@ const Layout = ({ children }) => {
               <hr />
             </div>
             <div className="menu">
-              {SidebarMenu.map((menu) => {
+              {SidebarMenu.map((menu, index) => {
                 const isActive = location.pathname === menu.path;
                 return (
-                  <>
-                    <div className={`menu-item ${isActive && "active"}`}>
-                      <i className={menu.icon}></i>
-                      <Link to={menu.path}>{menu.name}</Link>
-                    </div>
-                  </>
+                  <div key={index} className={`menu-item ${isActive && "active"}`}>
+                    <i className={menu.icon}></i>
+                    <Link to={menu.path}>{menu.name}</Link>
+                  </div>
                 );
               })}
-              <div className={`menu-item }`} onClick={handleLogout}>
+              <div className="menu-item" onClick={handleLogout}>
                 <i className="fa-solid fa-right-from-bracket"></i>
-                <Link to="/login">Log Out</Link>
+                <span>Log Out</span>
               </div>
             </div>
           </div>
           <div className="content">
             <div className="header">
               <div className="header-content">
-                <i class="fa-solid fa-bell"></i>
+                <Badge count={user?.notification?.length}>
+                 
+                </Badge>
+                <i className="fa-solid fa-bell"></i>
                 <Link to="/profile">{user?.name}</Link>
               </div>
             </div>
