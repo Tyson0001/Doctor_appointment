@@ -1,14 +1,122 @@
- .form-container {
-    width: 100%;
+/* Global Style */
+body {
+    font-family: 'Arial', sans-serif;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* Ensure the body takes up the full height of the viewport */
+    margin: 0; /* Remove default margin */
+    background-color: #deedf8c5;
+}
+
+/* Header Section */
+.header-section {
+    background-color: #002855; /* Dark blue background */
+    padding: 10px 0;
+    text-align: center;
+    margin-bottom: 100px;
+}
+
+.logo-container {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
-    background-color: #f5f5f5;
-    border: 1px solid black;
+    gap: 1.5rem;
 }
-.register-form {
-    padding: 30px;
-    background-color: white;
-    border: 1px solid grey;
+
+.logo-image {
+    max-width: 120px; /* Slightly bigger logo */
+    max-height: 120px;
+    width: auto;
+    height: auto;
+}
+
+.heading {
+    color: white;
+    font-size: 2rem;
+    margin: 0;
+    font-weight: bold;
+}
+
+.header-divider {
+    border: 0;
+    border-top: 1px solid #fff;
+    width: 100%;
+    margin: 20px auto;
+}
+
+/* Form Section */
+.form-section {
+    display: flex;
+    justify-content: center;
+    flex: 1; /* Ensure the form takes up available space */
+    padding: 20px;
+    
+}
+
+.form-wrapper {
+    width: 100%;
+    max-width: 400px;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+}
+
+.form-title, .form-title2 {
+    color: #002855;
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.register-form .ant-form-item-label {
+    font-weight: bold;
+}
+
+.extra-links {
+    text-align: center;
+    margin-top: 10px;
+}
+
+.extra-links a {
+    color: #002855;
+    text-decoration: none;
+}
+
+.extra-links a:hover {
+    text-decoration: underline;
+}
+
+/* Button Styling */
+.btn-primary {
+    width: 100%;
+    padding: 10px;
+    background-color: #002855;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.btn-primary:hover {
+    background-color: #005b96;
+}
+
+/* Footer Section (Fixed at Bottom) */
+.footer-section {
+    background-color: #002855;
+    color: white;
+    text-align: center;
+    padding: 10px 0;
+    position: absolute; /* Fix the footer at the bottom */
+    bottom: 0; /* Ensure it stays at the bottom */
+    width: 100%; /* Take up full width */
+}
+
+.footer-text {
+    margin: 0;
+    font-size: 1rem;
 }
