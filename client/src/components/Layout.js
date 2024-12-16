@@ -49,8 +49,7 @@ const Layout = ({ children }) => {
         <div className="layout">
           <div className="sidebar">
             <div className="logo">
-              <h6 className="text-light">DOC APP</h6>
-              <hr />
+            <img src="/logo.png" alt="IIT Jodhpur Logo" className="logo-image" />      
             </div>
             <div className="menu">
               {SidebarMenu.map((menu) => {
@@ -70,6 +69,9 @@ const Layout = ({ children }) => {
           </div>
           <div className="content">
             <div className="header">
+              <div>
+              <h3>HEALTH CENTRE - INDIAN INSTITUTE OF TECHNOLOGY Jodhpur</h3>
+              </div>
               <div className="header-content" style={{ cursor: "pointer" }}>
                 <Badge
                   count={user?.notifcation?.length || 0}  // Added safety check here
@@ -79,8 +81,7 @@ const Layout = ({ children }) => {
                 >
                   <i className="fa-solid fa-bell"></i>
                 </Badge>
-
-                <Link to="/profile">{user?.name}</Link>
+                <Link to="/profile" className="user-link">{user?.name}</Link>
               </div>
             </div>
             <div className="body">{children}</div>
