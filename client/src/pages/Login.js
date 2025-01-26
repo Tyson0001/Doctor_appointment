@@ -1,5 +1,5 @@
-import React from "react";
-import "../styles/Registerstyle.css";
+import React, { useState } from "react";
+import "../styles/Registerstyle.css"; 
 import { Form, Input, message } from "antd";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
@@ -9,16 +9,18 @@ import axios from "axios";
 const Login = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [loginType, setLoginType] = useState("doctor"); // Toggle between doctor and patient login
 
   // Handle form submission
   const onFinishHandler = async (values) => {
     try {
       dispatch(showLoading());
-      const res = await axios.post("/api/v1/user/login", values);
+      const endpoint = loginType === "doctor" ? "/api/v1/doctor/login" : "/api/v1/user/login";
+      const res = await axios.post(endpoint, values);
       dispatch(hideLoading());
       if (res?.data?.success) {
         localStorage.setItem("token", res.data.token);
-        message.success("Login Successfully");
+        message.success(`${loginType === "doctor" ? "Doctor" : "Patient"} Login Successful`);
         navigate("/"); // Redirect without reloading
       } else {
         message.error(res?.data?.message || "Login failed");
@@ -42,10 +44,28 @@ const Login = () => {
         <hr className="header-divider" />
       </header>
 
+      {/* Toggle Section */}
+      <div className="toggle-section">
+        <button
+          className={`toggle-button ${loginType === "doctor" ? "active" : ""}`}
+          onClick={() => setLoginType("doctor")}
+        >
+          Doctor Login
+        </button>
+        <button
+          className={`toggle-button ${loginType === "patient" ? "active" : ""}`}
+          onClick={() => setLoginType("patient")}
+        >
+          Patient Login
+        </button>
+      </div>
+
       {/* Main Content Section */}
       <main className="form-section">
         <div className="form-wrapper">
-          <h2 className="form-title">Login to Your Account</h2>
+          <h2 className="form-title">
+            {loginType === "doctor" ? "Doctor Login" : "Patient Login"}
+          </h2>
           <Form
             layout="vertical"
             onFinish={onFinishHandler}
@@ -74,18 +94,22 @@ const Login = () => {
 
             {/* Login Button */}
             <button className="btn btn-primary" type="submit">
-              Login
+              Login as {loginType === "doctor" ? "Doctor" : "Patient"}
             </button>
           </Form>
 
           {/* Additional Links */}
           <div className="extra-links">
-            <Link to="/register">Not a registered user? Sign up here</Link>
+            {loginType === "doctor" ? (
+              <Link to="/doctor-register">Not a registered doctor? Sign up here</Link>
+            ) : (
+              <Link to="/register">Not a registered patient? Sign up here</Link>
+            )}
           </div>
         </div>
       </main>
 
-      {/* Footer Section */}  
+      {/* Footer Section */}
       <footer className="footer-section">
         <p className="footer-text">
           © {new Date().getFullYear()} Indian Institute of Technology Jodhpur

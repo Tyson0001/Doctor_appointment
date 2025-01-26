@@ -43,7 +43,7 @@ const Register = () => {
       {/* Registration Form Section */}
       <main className="form-section">
         <div className="form-wrapper">
-          <h2 className="form-title2">Register to Your Account</h2>
+          <h2 className="form-title2">Patient Register</h2>
           <Form layout="vertical" onFinish={onFinishHandler} className="register-form">
             {/* Name Field */}
             <Form.Item label="Name" name="name" rules={[{ required: true, message: "Please enter your name!" }]}>
