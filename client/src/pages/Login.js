@@ -26,7 +26,7 @@ const Login = () => {
         message.error(res?.data?.message || "Login failed");
       }
     } catch (error) {
-      dispatch(hideLoading());
+      dispatch(hideLoading());//dispatch
       message.error("Something went wrong");
     }
   };
