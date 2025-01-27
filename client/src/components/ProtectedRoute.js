@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useCallback } from "react";
 import { Navigate } from "react-router-dom";
 import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
@@ -9,9 +9,8 @@ export default function ProtectedRoute({ children }) {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.user);
 
-  //get user
-  //eslint-disable-next-line
-  const getUser = async () => {
+  // Memoize the getUser function
+  const getUser = useCallback(async () => {
     try {
       dispatch(showLoading());
       const res = await axios.post(
@@ -28,14 +27,15 @@ export default function ProtectedRoute({ children }) {
         dispatch(setUser(res.data.data));
       } else {
         localStorage.clear();
-        <Navigate to="/login" />;
+        return <Navigate to="/login" />;
       }
     } catch (error) {
       localStorage.clear();
       dispatch(hideLoading());
       console.log(error);
+      return <Navigate to="/login" />;
     }
-  };
+  }, [dispatch]);
 
   useEffect(() => {
     if (!user) {

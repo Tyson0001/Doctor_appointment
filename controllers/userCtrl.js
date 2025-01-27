@@ -99,7 +99,7 @@ const applyDoctorController = async (req, res) => {
     await userModel.findByIdAndUpdate(adminUser._id, { notifcation });
     res.status(201).send({
       success: true,
-      message: "Doctor Account Applied SUccessfully",
+      message: "Doctor Account Applied Successfully",
     });
   } catch (error) {
     console.log(error);
