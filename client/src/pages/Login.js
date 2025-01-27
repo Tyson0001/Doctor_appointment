@@ -21,7 +21,12 @@ const Login = () => {
       if (res?.data?.success) {
         localStorage.setItem("token", res.data.token);
         message.success(`${loginType === "doctor" ? "Doctor" : "Patient"} Login Successful`);
-        navigate("/"); // Redirect without reloading
+        //navigate("/"); // Redirect without reloading
+        if (loginType === "doctor") {
+          navigate("/doctor-dashboard"); // Redirect doctor to a different route
+        } else {
+          navigate("/"); // Redirect patient to the homepage
+        }
       } else {
         message.error(res?.data?.message || "Login failed");
       }

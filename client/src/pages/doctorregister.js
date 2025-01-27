@@ -5,8 +5,16 @@ import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { showLoading, hideLoading } from "../redux/features/alertSlice";
+import React from "react";
+import "../styles/Registerstyle.css";
+import { Form, Input, message, Select, InputNumber, TimePicker } from "antd";
+import axios from "axios";
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { showLoading, hideLoading } from "../redux/features/alertSlice";
 
 const { Option } = Select;
+
 
 const DoctorRegister = () => {
   const navigate = useNavigate();

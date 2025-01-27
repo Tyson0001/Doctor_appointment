@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
+import { DatePicker } from "antd";
+
 import Layout from "../components/Layout";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import { DatePicker, message, TimePicker } from "antd";
+import { message } from "antd";
 import moment from "moment";
 import { useDispatch, useSelector } from "react-redux";
 import { showLoading, hideLoading } from "../redux/features/alertSlice";
@@ -12,10 +14,11 @@ const BookingPage = () => {
   const params = useParams();
   const [doctors, setDoctors] = useState([]);
   const [date, setDate] = useState("");
-  const [time, setTime] = useState();
+  const [selectedTime, setSelectedTime] = useState(null); // state for selected time
   const [isAvailable, setIsAvailable] = useState(false);
   const dispatch = useDispatch();
-  // login user data
+
+  // Get doctor data
   const getUserData = async () => {
     try {
       const res = await axios.post(
@@ -34,13 +37,14 @@ const BookingPage = () => {
       console.log(error);
     }
   };
-  // ============ handle availiblity
+
+  // Handle availability check
   const handleAvailability = async () => {
     try {
       dispatch(showLoading());
       const res = await axios.post(
         "/api/v1/user/booking-availbility",
-        { doctorId: params.doctorId, date, time },
+        { doctorId: params.doctorId, date, time: selectedTime },
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -50,7 +54,6 @@ const BookingPage = () => {
       dispatch(hideLoading());
       if (res.data.success) {
         setIsAvailable(true);
-        console.log(isAvailable);
         message.success(res.data.message);
       } else {
         message.error(res.data.message);
@@ -60,11 +63,11 @@ const BookingPage = () => {
       console.log(error);
     }
   };
-  // =============== booking func
+
+  // Handle booking
   const handleBooking = async () => {
     try {
-      setIsAvailable(true);
-      if (!date && !time) {
+      if (!date || !selectedTime) {
         return alert("Date & Time Required");
       }
       dispatch(showLoading());
@@ -76,7 +79,7 @@ const BookingPage = () => {
           doctorInfo: doctors,
           userInfo: user,
           date: date,
-          time: time,
+          time: selectedTime,
         },
         {
           headers: {
@@ -94,10 +97,31 @@ const BookingPage = () => {
     }
   };
 
+  // Generate time slots for the doctor based on available timings
+  const generateTimeSlots = (startTime, endTime) => {
+    const slots = [];
+    let currentTime = moment(startTime, "HH:mm");
+    const endTimeMoment = moment(endTime, "HH:mm");
+
+    while (currentTime.isBefore(endTimeMoment)) {
+      slots.push(currentTime.format("HH:mm"));
+      currentTime = currentTime.add(15, "minutes");
+    }
+
+    return slots;
+  };
+
+  // Handle date selection and show available time slots
+  const handleDateChange = (value) => {
+    setDate(moment(value).format("DD-MM-YYYY"));
+    setSelectedTime(null);  // Reset selected time when changing the date
+  };
+
   useEffect(() => {
     getUserData();
     //eslint-disable-next-line
   }, []);
+
   return (
     <Layout>
       <h3>Booking Page</h3>
@@ -110,32 +134,37 @@ const BookingPage = () => {
             <h4>Fees : {doctors.feesPerCunsaltation}</h4>
             <h4>
               Timings : {doctors.timings && doctors.timings[0]} -{" "}
-              {doctors.timings && doctors.timings[1]}{" "}
+              {doctors.timings && doctors.timings[1]}
             </h4>
+
             <div className="d-flex flex-column w-50">
+              {/* Date Picker */}
               <DatePicker
                 aria-required={"true"}
                 className="m-2"
                 format="DD-MM-YYYY"
-                onChange={(value) => {
-                  setDate(moment(value).format("DD-MM-YYYY"));
-                }}
-              />
-              <TimePicker
-                aria-required={"true"}
-                format="HH:mm"
-                className="mt-3"
-                onChange={(value) => {
-                  setTime(moment(value).format("HH:mm"));
-                }}
+                onChange={handleDateChange}
               />
 
-              <button
-                className="btn btn-primary mt-2"
-                onClick={handleAvailability}
-              >
-                Check Availability
-              </button>
+              {/* Time Slot Grid (Will show after selecting a date) */}
+              {date && doctors.timings && (
+                <div className="mt-3">
+                  <h5>Select a Time Slot</h5>
+                  <div className="grid-container">
+                    {generateTimeSlots("05:00", "08:00").map((slot, index) => (
+                      <button
+                        key={index}
+                        className={`grid-item ${selectedTime === slot ? "selected" : ""}`}
+                        onClick={() => setSelectedTime(slot)}
+                      >
+                        {slot}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              
 
               <button className="btn btn-dark mt-2" onClick={handleBooking}>
                 Book Now
@@ -144,6 +173,33 @@ const BookingPage = () => {
           </div>
         )}
       </div>
+
+      <style>
+        {`
+          .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+            gap: 10px;
+          }
+
+          .grid-item {
+            padding: 10px;
+            background-color: #f0f0f0;
+            border: 1px solid #ccc;
+            cursor: pointer;
+            text-align: center;
+          }
+
+          .grid-item:hover {
+            background-color: #ddd;
+          }
+
+          .grid-item.selected {
+            background-color: #4caf50;
+            color: white;
+          }
+        `}
+      </style>
     </Layout>
   );
 };

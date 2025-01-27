@@ -2,7 +2,7 @@ const express = require("express");
 const {
   doctorloginController,
   doctorregisterController,
-  authController,
+  doctorauthController,
   getDoctorInfoController,
   updateProfileController,
   getDoctorByIdController,
@@ -10,31 +10,34 @@ const {
   updateStatusController,
 } = require("../controllers/doctorCtrl.js");
 const authMiddleware = require("../middlewares/authMiddlewares.js");
-
 const router = express.Router();
 
-// Doctor login
+//LOGIN || POST
 router.post("/login", doctorloginController);
 
-// Doctor register
+// POST request for doctor registration
 router.post("/doctorregister", doctorregisterController);
 
-// Auth
-router.post("/getUserData", authMiddleware, authController);
+//Auth || POST
+router.post("/getUserData", authMiddleware, doctorauthController);
 
-// Get doctor info
+//POST SINGLE DOC INFO
 router.post("/getDoctorInfo", authMiddleware, getDoctorInfoController);
 
-// Update doctor profile
+//POST UPDATE PROFILE
 router.post("/updateProfile", authMiddleware, updateProfileController);
 
-// Get doctor by ID
+//POST  GET SINGLE DOC INFO
 router.post("/getDoctorById", authMiddleware, getDoctorByIdController);
 
-// Doctor appointments
-router.get("/doctor-appointments", authMiddleware, doctorAppointmentsController);
+//GET Appointments
+router.get(
+  "/doctor-appointments",
+  authMiddleware,
+  doctorAppointmentsController
+);
 
-// Update appointment status
+//POST Update Status
 router.post("/update-status", authMiddleware, updateStatusController);
 
 module.exports = router;
