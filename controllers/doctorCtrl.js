@@ -1,6 +1,103 @@
-const appointmentModel = require("../models/appointmentModel");
-const doctorModel = require("../models/doctorModel");
+const doctorModel = require("../models/doctorModel.js");
+const bcrypt = require('bcrypt');
+const jwt = require("jsonwebtoken");
 const userModel = require("../models/userModels");
+const appointmentModel = require("../models/appointmentModel");
+const moment = require("moment");
+// const { registerController } = require("./userCtrl");
+
+
+
+
+//Login controller
+const doctorloginController = async (req, res) => { 
+  try {
+    const user = await doctorModel.findOne({ email: req.body.email });
+    if (!user) {
+      return res
+        .status(200)
+        .send({ message: "user not found", success: false });
+    }
+    const isMatch = await bcrypt.compare(req.body.password, user.password);
+    if (!isMatch) {
+      return res
+        .status(200)
+        .send({ message: "Invalid Email or Password", success: false });
+    }
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+      expiresIn: "1d",
+    });
+    res.status(200).send({ message: "Login Success", success: true, token });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ message: `Error in Login CTRL ${error.message}` });
+  }
+};
+
+//doctor register
+const doctorregisterController = async (req, res) => {
+  try {
+    const { email, password, name, phone, website, address, specialization, experience, feesPerConsultation, timings } =
+      req.body
+
+    const exisitingDoctor = await doctorModel.findOne({ email: req.body.email });
+    if (exisitingDoctor) {
+      return res
+        .status(200)
+        .send({ message: "Docter Already Exist", success: false });
+    }
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+    req.body.password = hashedPassword;
+    const newDoctor = new doctorModel({
+      email,
+      password: hashedPassword,
+      name,
+      phone,
+      website,
+      address,
+      specialization,
+      experience,
+      feesPerConsultation,
+      timings,
+    });
+    await newDoctor.save();
+    res.status(201).send({ message: "Register Sucessfully", success: true });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      success: false,
+      message: `doctorregisterController ${error.message}`,
+    });
+  }
+};
+
+const doctorauthController = async (req, res) => {
+  try {
+    const user = await doctorModel.findById({ _id: req.body.userId });
+    user.password = undefined;
+    if (!user) {
+      return res.status(200).send({
+        message: "user not found",
+        success: false,
+      });
+    } else {
+      res.status(200).send({
+        success: true,
+        data: user,
+      });
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      message: "auth error",
+      success: false,
+      error,
+    });
+  }
+};
+
+//getDoctorInfoController
 const getDoctorInfoController = async (req, res) => {
   try {
     const doctor = await doctorModel.findOne({ userId: req.body.userId });
@@ -41,30 +138,7 @@ const updateProfileController = async (req, res) => {
   }
 };
 
-//doctor registor
-const doctorregisterController = async (req, res) => {
-  try {
-    const exisitingUser = await userModel.findOne({ email: req.body.email });
-    if (exisitingUser) {
-      return res
-        .status(200)
-        .send({ message: "User Already Exist", success: false });
-    }
-    const password = req.body.password;
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
-    req.body.password = hashedPassword;
-    const newUser = new userModel(req.body);
-    await newUser.save();
-    res.status(201).send({ message: "Register Sucessfully", success: true });
-  } catch (error) {
-    console.log(error);
-    res.status(500).send({
-      success: false,
-      message: `Register Controller ${error.message}`,
-    });
-  }
-};
+
 
 //get single docotor
 const getDoctorByIdController = async (req, res) => {
@@ -136,6 +210,9 @@ const updateStatusController = async (req, res) => {
 };
 
 module.exports = {
+  doctorloginController,
+  doctorregisterController,
+  doctorauthController,
   getDoctorInfoController,
   updateProfileController,
   getDoctorByIdController,

@@ -93,24 +93,15 @@ const Profile = () => {
           <Row gutter={20}>
             <Col xs={24} md={24} lg={8}>
               <Form.Item
-                label="First Name"
-                name="firstName"
+                label="Name"
+                name="name"
                 required
                 rules={[{ required: true }]}
               >
                 <Input type="text" placeholder="your first name" />
               </Form.Item>
             </Col>
-            <Col xs={24} md={24} lg={8}>
-              <Form.Item
-                label="Last Name"
-                name="lastName"
-                required
-                rules={[{ required: true }]}
-              >
-                <Input type="text" placeholder="your last name" />
-              </Form.Item>
-            </Col>
+            
             <Col xs={24} md={24} lg={8}>
               <Form.Item
                 label="Phone No"
@@ -171,8 +162,8 @@ const Profile = () => {
             </Col>
             <Col xs={24} md={24} lg={8}>
               <Form.Item
-                label="Fees Per Cunsaltation"
-                name="feesPerCunsaltation"
+                label="Fees Per Consultation"
+                name="feesPerConsultation"
                 required
                 rules={[{ required: true }]}
               >

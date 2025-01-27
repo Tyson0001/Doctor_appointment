@@ -11,7 +11,7 @@ const DoctorList = ({ doctor }) => {
         onClick={() => navigate(`/doctor/book-appointment/${doctor._id}`)}
       >
         <div className="card-header">
-          Dr. {doctor.firstName} {doctor.lastName}
+          Dr. {doctor.name}
         </div>
         <div className="card-body">
           <p>
@@ -21,7 +21,7 @@ const DoctorList = ({ doctor }) => {
             <b>Experience</b> {doctor.experience}
           </p>
           <p>
-            <b>Fees Per Cunsaltation</b> {doctor.feesPerCunsaltation}
+            <b>Fees Per Cunsultation</b> {doctor.feesPerCunsultation}
           </p>
           <p>
             <b>Timings</b> {doctor.timings[0]} - {doctor.timings[1]}

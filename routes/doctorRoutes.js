@@ -1,13 +1,25 @@
 const express = require("express");
 const {
+  doctorloginController,
+  doctorregisterController,
+  doctorauthController,
   getDoctorInfoController,
   updateProfileController,
   getDoctorByIdController,
   doctorAppointmentsController,
   updateStatusController,
-} = require("../controllers/doctorCtrl");
-const authMiddleware = require("../middlewares/authMiddlewares");
+} = require("../controllers/doctorCtrl.js");
+const authMiddleware = require("../middlewares/authMiddlewares.js");
 const router = express.Router();
+
+//LOGIN || POST
+router.post("/login", doctorloginController);
+
+// POST request for doctor registration
+router.post("/doctorregister", doctorregisterController);
+
+//Auth || POST
+router.post("/getUserData", authMiddleware, doctorauthController);
 
 //POST SINGLE DOC INFO
 router.post("/getDoctorInfo", authMiddleware, getDoctorInfoController);
