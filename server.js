@@ -4,28 +4,29 @@ const dotenv = require('dotenv');
 const morgan = require('morgan');
 const connectDB = require('./config/db.js');
 
-// dotenv
+// Load environment variables
 dotenv.config();
 
-// connect to db
+// Connect to the database
 connectDB();
 
-// rest object
+// Create an Express app
 const app = express();
 
-// middleware
-app.use(express.json());
-app.use(morgan('dev'));
+// Middleware
+app.use(express.json()); // Parse JSON request bodies
+app.use(morgan('dev')); // Log HTTP requests in development mode
 
-// routes
-app.use('/api/v1/user', require('./routes/userRoutes.js'));
-app.use('/api/v1/admin', require('./routes/adminRoutes.js'));
-app.use("/api/v1/doctor", require("./routes/doctorRoutes.js"));
+// Routes
+app.use('/api/v1/user', require('./routes/userRoutes.js')); // User routes
+app.use('/api/v1/admin', require('./routes/adminRoutes.js')); // Admin routes
+app.use('/api/v1/doctor', require('./routes/doctorRoutes.js')); // Doctor routes
 
-// listen
+// Start the server
 const PORT = process.env.PORT || 8070;
 
 app.listen(PORT, () => {
-  console.log(`Server is running on port ${process.env.NODE_MODE}MADE ON ${process.env.PORT} `
-    .bgCyan.black);
-})
+  console.log(
+    `Server is running in ${process.env.NODE_MODE} mode on port ${PORT}`.bgCyan.black
+  );
+});

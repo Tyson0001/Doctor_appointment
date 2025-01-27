@@ -3,6 +3,12 @@ import { useNavigate } from "react-router-dom";
 
 const DoctorList = ({ doctor }) => {
   const navigate = useNavigate();
+
+  // Handle click to navigate to the appointment booking page
+  const handleCardClick = () => {
+    navigate(`/doctor/book-appointment/${doctor._id}`);
+  };
+
   return (
     <>
       <div

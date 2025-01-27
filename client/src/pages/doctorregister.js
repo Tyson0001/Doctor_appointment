@@ -5,14 +5,22 @@ import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { showLoading, hideLoading } from "../redux/features/alertSlice";
+import React from "react";
+import "../styles/Registerstyle.css";
+import { Form, Input, message, Select, InputNumber, TimePicker } from "antd";
+import axios from "axios";
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { showLoading, hideLoading } from "../redux/features/alertSlice";
 
 const { Option } = Select;
+
 
 const DoctorRegister = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  // form handler
+  // Form handler
   const onFinishHandler = async (values) => {
     try {
       dispatch(showLoading());
@@ -26,11 +34,9 @@ const DoctorRegister = () => {
         ],
       };
 
-      const res = await axios.post(
-        "/api/v1/doctor/doctorregister",
-        formattedValues
-      );
+      const res = await axios.post('/api/v1/doctor/doctorregister', formattedValues);
       dispatch(hideLoading());
+
       if (res.data.success) {
         message.success("Doctor Registered Successfully!");
         navigate("/login");
@@ -39,8 +45,10 @@ const DoctorRegister = () => {
       }
     } catch (error) {
       dispatch(hideLoading());
-      console.log(error);
-      message.error("Something Went Wrong");
+      console.error(error);
+      message.error(
+        error.response?.data?.message || "Something Went Wrong"
+      );
     }
   };
 
@@ -181,7 +189,7 @@ const DoctorRegister = () => {
             {/* Fees Per Consultation */}
             <Form.Item
               label="Fees Per Consultation"
-              name="feesPerConsultation" // Corrected typo to match backend
+              name="feesPerConsultation" // Corrected to match backend
               rules={[
                 {
                   required: true,
