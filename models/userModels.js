@@ -29,6 +29,10 @@ const userSchema = new mongoose.Schema({
     type: Array,
     default: [],
   },
+  qrCode: {
+    type: String, // Store the QR code as a string (Base64-encoded image or a URL)
+    default: "",
+  },
 });
 
 const userModel = mongoose.model("users", userSchema);

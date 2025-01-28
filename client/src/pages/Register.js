@@ -18,6 +18,13 @@ const Register = () => {
       dispatch(hideLoading());
       if (res.data.success) {
         message.success("Registered Successfully!");
+        // Display the QR code (optional)
+        if (res.data.qrCode) {
+          const qrWindow = window.open();
+          qrWindow.document.write(
+            `<h1>Your QR Code</h1><img src="${res.data.qrCode}" alt="QR Code" />`
+          );
+        }
         navigate("/login");
       } else {
         message.error(res.data.message);
@@ -35,7 +42,9 @@ const Register = () => {
       <header className="header-section">
         <div className="logo-container">
           <img src="/logo.png" alt="IIT Jodhpur Logo" className="logo-image" />
-          <h1 className="heading">Health Centre - Indian Institute Of Technology Jodhpur</h1>
+          <h1 className="heading">
+            Health Centre - Indian Institute Of Technology Jodhpur
+          </h1>
         </div>
         <hr className="header-divider" />
       </header>
@@ -44,19 +53,40 @@ const Register = () => {
       <main className="form-section">
         <div className="form-wrapper">
           <h2 className="form-title2">Patient Register</h2>
-          <Form layout="vertical" onFinish={onFinishHandler} className="register-form">
+          <Form
+            layout="vertical"
+            onFinish={onFinishHandler}
+            className="register-form"
+          >
             {/* Name Field */}
-            <Form.Item label="Name" name="name" rules={[{ required: true, message: "Please enter your name!" }]}>
+            <Form.Item
+              label="Name"
+              name="name"
+              rules={[{ required: true, message: "Please enter your name!" }]}
+            >
               <Input type="text" placeholder="Enter your name" />
             </Form.Item>
 
             {/* Email Field */}
-            <Form.Item label="Email" name="email" rules={[{ required: true, message: "Please enter your email!" }, { type: "email", message: "Please enter a valid email!" }]}>
+            <Form.Item
+              label="Email"
+              name="email"
+              rules={[
+                { required: true, message: "Please enter your email!" },
+                { type: "email", message: "Please enter a valid email!" },
+              ]}
+            >
               <Input type="email" placeholder="Enter your email" />
             </Form.Item>
 
             {/* Password Field */}
-            <Form.Item label="Password" name="password" rules={[{ required: true, message: "Please enter your password!" }]}>
+            <Form.Item
+              label="Password"
+              name="password"
+              rules={[
+                { required: true, message: "Please enter your password!" },
+              ]}
+            >
               <Input.Password placeholder="Enter your password" />
             </Form.Item>
 
@@ -75,7 +105,9 @@ const Register = () => {
 
       {/* Footer Section */}
       <footer className="footer-section">
-        <p className="footer-text">© {new Date().getFullYear()} Indian Institute of Technology Jodhpur</p>
+        <p className="footer-text">
+          © {new Date().getFullYear()} Indian Institute of Technology Jodhpur
+        </p>
       </footer>
     </div>
   );

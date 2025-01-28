@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import HomePage from "./pages/Homepage";
+import DrHomePage from "./pages/DrHomePage";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import { useSelector } from "react-redux";
@@ -15,7 +16,8 @@ import BookingPage from "./pages/BookingPage";
 import Appointments from "./pages/Appointments";
 import DoctorAppointments from "./pages/doctors/DoctorAppointments";
 import DoctorRegister from "./pages/doctorregister";
-import DoctorDashboard from "./pages/DoctorDashboard";
+import ScanQR from "./pages/ScanQR"; // Import the ScanQR component
+
 function App() {
   const { loading } = useSelector((state) => state.alerts);
   return (
@@ -25,6 +27,14 @@ function App() {
           <Spinner />
         ) : (
           <Routes>
+            <Route
+              path="/scan-qr"
+              element={
+                <ProtectedRoute>
+                  <ScanQR />
+                </ProtectedRoute>
+              }
+            />
             <Route
               path="/apply-doctor"
               element={
@@ -122,14 +132,13 @@ function App() {
               }
             />
             <Route
-              path="/doctor-dashboard"
+              path="/doctor-homepage"
               element={
                 <ProtectedRoute>
-                  <DoctorDashboard />
+                  <DrHomePage />
                 </ProtectedRoute>
               }
             />
-            
           </Routes>
         )}
       </BrowserRouter>

@@ -23,7 +23,7 @@ const Login = () => {
         message.success(`${loginType === "doctor" ? "Doctor" : "Patient"} Login Successful`);
         //navigate("/"); // Redirect without reloading
         if (loginType === "doctor") {
-          navigate("/doctor-dashboard"); // Redirect doctor to a different route
+          navigate("/doctor-homepage"); // Redirect doctor to a different route
         } else {
           navigate("/"); // Redirect patient to the homepage
         }

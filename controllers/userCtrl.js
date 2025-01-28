@@ -1,11 +1,13 @@
 const userModel = require("../models/userModels");
 const bcrypt = require("bcryptjs");
+const QRCode = require("qrcode");
 const jwt = require("jsonwebtoken");
-const doctorModel = require("../models/doctorModel")
+
+const doctorModel = require("../models/doctorModel");
 const appointmentModel = require("../models/appointmentModel");
 const moment = require("moment");
 //LOGIN
-const loginController = async (req, res) => { 
+const loginController = async (req, res) => {
   try {
     const user = await userModel.findOne({ email: req.body.email });
     if (!user) {
@@ -40,13 +42,24 @@ const registerController = async (req, res) => {
         .status(200)
         .send({ message: "User Already Exist", success: false });
     }
+
     const password = req.body.password;
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
     req.body.password = hashedPassword;
-    const newUser = new userModel(req.body);
+
+    // Generate QR Code for the user
+    const qrCodeData = JSON.stringify({
+      name: req.body.name,
+      email: req.body.email,
+    });
+    const qrCode = await QRCode.toDataURL(qrCodeData);
+
+    // Save user with QR Code
+    const newUser = new userModel({ ...req.body, qrCode });
     await newUser.save();
-    res.status(201).send({ message: "Register Sucessfully", success: true });
+
+    res.status(201).send({ message: "Registered Successfully", success: true });
   } catch (error) {
     console.log(error);
     res.status(500).send({
@@ -76,6 +89,44 @@ const authController = async (req, res) => {
       message: "auth error",
       success: false,
       error,
+    });
+  }
+};
+
+const getCurrentUserDataController = async (req, res) => {
+  try {
+    // Extract the token from the Authorization header (Bearer token)
+    const token = req.headers.authorization?.split(" ")[1]; // 'Bearer <token>'
+    if (!token) {
+      return res
+        .status(401)
+        .send({ message: "Unauthorized: No token provided" });
+    }
+
+    // Verify the token using JWT
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+    // Find the user based on the decoded ID
+    const user = await userModel.findById(decoded.id);
+    if (!user) {
+      return res.status(404).send({ message: "User not found" });
+    }
+
+    // Remove sensitive information like password before sending the response
+    user.password = undefined;
+
+    // Return the user data
+    res.status(200).send({
+      success: true,
+      message: "User data fetched successfully",
+      data: user,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({
+      success: false,
+      message: "Error fetching user data",
+      error: error.message,
     });
   }
 };
@@ -276,4 +327,5 @@ module.exports = {
   bookeAppointmnetController,
   bookingAvailabilityController,
   userAppointmentsController,
+  getCurrentUserDataController,
 };

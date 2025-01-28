@@ -3,7 +3,7 @@ const {
   doctorloginController,
   doctorregisterController,
   doctorauthController,
-  getDoctorInfoController,
+  getAllDoctorsController,
   updateProfileController,
   getDoctorByIdController,
   doctorAppointmentsController,
@@ -22,7 +22,7 @@ router.post("/doctorregister", doctorregisterController);
 router.post("/getUserData", authMiddleware, doctorauthController);
 
 //POST SINGLE DOC INFO
-router.post("/getDoctorInfo", authMiddleware, getDoctorInfoController);
+router.get("/getDoctors", authMiddleware, getAllDoctorsController);
 
 //POST UPDATE PROFILE
 router.post("/updateProfile", authMiddleware, updateProfileController);

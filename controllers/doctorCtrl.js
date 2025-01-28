@@ -89,24 +89,28 @@ const doctorauthController = async (req, res) => {
   }
 };
 
-// Get doctor info
-const getDoctorInfoController = async (req, res) => {
+// Get all doctor info
+const getAllDoctorsController = async (req, res) => {
   try {
-    const doctor = await doctorModel.findOne({ userId: req.body.userId });
+    // Fetch all doctor records from the database
+    const doctors = await doctorModel.find(); // This will fetch all doctors
     res.status(200).send({
       success: true,
-      message: "Doctor data fetch success",
-      data: doctor,
+      message: "Doctors data fetch success",
+      data: doctors,
     });
   } catch (error) {
     console.log(error);
     res.status(500).send({
       success: false,
       error,
-      message: "Error in Fetching Doctor Details",
+      message: "Error in Fetching Doctors Details",
     });
   }
 };
+
+
+
 
 // Update doctor profile
 const updateProfileController = async (req, res) => {
@@ -206,7 +210,7 @@ module.exports = {
   doctorloginController,
   doctorregisterController,
   doctorauthController,
-  getDoctorInfoController,
+  getAllDoctorsController,
   updateProfileController,
   getDoctorByIdController,
   doctorAppointmentsController,

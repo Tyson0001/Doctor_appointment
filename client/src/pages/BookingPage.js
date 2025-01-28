@@ -105,7 +105,7 @@ const BookingPage = () => {
 
     while (currentTime.isBefore(endTimeMoment)) {
       slots.push(currentTime.format("HH:mm"));
-      currentTime = currentTime.add(15, "minutes");
+      currentTime = currentTime.add(10, "minutes");
     }
 
     return slots;
@@ -129,9 +129,9 @@ const BookingPage = () => {
         {doctors && (
           <div>
             <h4>
-              Dr.{doctors.firstName} {doctors.lastName}
+              Dr.{doctors.name}
             </h4>
-            <h4>Fees : {doctors.feesPerCunsaltation}</h4>
+            <h4>Fees : {doctors.feesPerConsultation}</h4>
             <h4>
               Timings : {doctors.timings && doctors.timings[0]} -{" "}
               {doctors.timings && doctors.timings[1]}
@@ -151,7 +151,7 @@ const BookingPage = () => {
                 <div className="mt-3">
                   <h5>Select a Time Slot</h5>
                   <div className="grid-container">
-                    {generateTimeSlots("05:00", "08:00").map((slot, index) => (
+                    {generateTimeSlots(doctors.timings[0], doctors.timings[1]).map((slot, index) => (
                       <button
                         key={index}
                         className={`grid-item ${selectedTime === slot ? "selected" : ""}`}

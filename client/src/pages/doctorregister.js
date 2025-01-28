@@ -5,16 +5,7 @@ import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { showLoading, hideLoading } from "../redux/features/alertSlice";
-import React from "react";
-import "../styles/Registerstyle.css";
-import { Form, Input, message, Select, InputNumber, TimePicker } from "antd";
-import axios from "axios";
-import { Link, useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { showLoading, hideLoading } from "../redux/features/alertSlice";
-
 const { Option } = Select;
-
 
 const DoctorRegister = () => {
   const navigate = useNavigate();
@@ -34,7 +25,10 @@ const DoctorRegister = () => {
         ],
       };
 
-      const res = await axios.post('/api/v1/doctor/doctorregister', formattedValues);
+      const res = await axios.post(
+        "/api/v1/doctor/doctorregister",
+        formattedValues
+      );
       dispatch(hideLoading());
 
       if (res.data.success) {
@@ -46,9 +40,7 @@ const DoctorRegister = () => {
     } catch (error) {
       dispatch(hideLoading());
       console.error(error);
-      message.error(
-        error.response?.data?.message || "Something Went Wrong"
-      );
+      message.error(error.response?.data?.message || "Something Went Wrong");
     }
   };
 
