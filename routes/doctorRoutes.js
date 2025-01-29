@@ -19,7 +19,7 @@ router.post("/login", doctorloginController);
 router.post("/doctorregister", doctorregisterController);
 
 //Auth || POST
-router.post("/getUserData", authMiddleware, doctorauthController);
+router.get("/auth", authMiddleware, doctorauthController);
 
 //POST SINGLE DOC INFO
 router.get("/getDoctors", authMiddleware, getAllDoctorsController);

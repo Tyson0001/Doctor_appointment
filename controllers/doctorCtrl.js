@@ -20,7 +20,16 @@ const doctorloginController = async (req, res) => {
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
       expiresIn: "1d",
     });
-    res.status(200).send({ message: "Login Success", success: true, token });
+    res.status(200).send({ 
+      message: "Login Success", 
+      success: true, 
+      token, 
+      user: {
+        name: user.name,
+        email: user.email,
+        isDoctor: true, // ✅ Ensure this is included
+      }
+    });
   } catch (error) {
     console.log(error);
     res.status(500).send({ message: `Error in Login CTRL: ${error.message}` });
@@ -63,26 +72,40 @@ const doctorregisterController = async (req, res) => {
   }
 };
 
-// Doctor authentication
 const doctorauthController = async (req, res) => {
   try {
-    const user = await doctorModel.findById(req.body.userId);
-    user.password = undefined;
-    if (!user) {
-      return res.status(200).send({
-        message: "User not found",
+    // Get the token from headers (Bearer <token>)
+    const token = req.headers.authorization?.split(" ")[1];
+
+    if (!token) {
+      return res.status(401).send({
+        message: "Token is required",
         success: false,
       });
-    } else {
-      res.status(200).send({
-        success: true,
-        data: user,
+    }
+
+    // Verify the token and decode the user data
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    
+    // Find the doctor using the decoded user ID from the token
+    const doctor = await doctorModel.findById(decoded.id).select("-password");
+
+    if (!doctor) {
+      return res.status(404).send({
+        message: "Doctor not found",
+        success: false,
       });
     }
+
+    // Return the doctor's data (excluding password)
+    res.status(200).send({
+      success: true,
+      data: doctor,
+    });
   } catch (error) {
     console.log(error);
     res.status(500).send({
-      message: "Auth error",
+      message: "Error in Doctor Authentication",
       success: false,
       error,
     });

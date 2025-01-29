@@ -20,8 +20,10 @@ const Login = () => {
       dispatch(hideLoading());
       if (res?.data?.success) {
         localStorage.setItem("token", res.data.token);
+        localStorage.setItem("loginType", loginType); // Store loginType in localStorage
         message.success(`${loginType === "doctor" ? "Doctor" : "Patient"} Login Successful`);
         //navigate("/"); // Redirect without reloading
+        console.log(loginType)
         if (loginType === "doctor") {
           navigate("/doctor-homepage"); // Redirect doctor to a different route
         } else {

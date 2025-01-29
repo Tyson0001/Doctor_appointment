@@ -10,7 +10,6 @@ const HomePage = () => {
   const [qrCode, setQrCode] = useState(""); // State for user's QR code
   const [showQr, setShowQr] = useState(false); // Define the state for toggling QR code visibility
 
-
   // login user data
   const getDoctors = async () => {
     try {
@@ -37,8 +36,8 @@ const HomePage = () => {
       if (res.data.success) {
         console.log("User QR Code:", res.data.data.qrCode); // Log the QR code response
         setQrCode(res.data.data.qrCode);
-      }else{
-        console.log("No Qr code in the response")
+      } else {
+        console.log("No Qr code in the response");
       }
     } catch (error) {
       console.log("Error fetching user data:", error);
@@ -56,9 +55,6 @@ const HomePage = () => {
     fetchData();
   }, []);
 
-  useEffect(() => {
-    console.log("QR Code:", qrCode); // This will log the QR code URL once the state is updated
-  }, [qrCode]);
 
   return (
     <Layout>
@@ -75,7 +71,10 @@ const HomePage = () => {
 
       {/* Conditionally display User's QR Code */}
       {showQr && qrCode && (
-        <div className="qr-code-container" style={{ textAlign: "center", marginBottom: "20px" }}>
+        <div
+          className="qr-code-container"
+          style={{ textAlign: "center", marginBottom: "20px" }}
+        >
           <h3>Your QR Code</h3>
           <img
             src={qrCode}

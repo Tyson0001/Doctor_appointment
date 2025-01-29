@@ -100,6 +100,14 @@ function App() {
               }
             />
             <Route
+              path="/doctor-register"
+              element={
+                <PublicRoute>
+                  <DoctorRegister />
+                </PublicRoute>
+              }
+            />
+            <Route
               path="/appointments"
               element={
                 <ProtectedRoute>
@@ -123,14 +131,7 @@ function App() {
                 </ProtectedRoute>
               }
             />
-            <Route
-              path="/doctor-register"
-              element={
-                <PublicRoute>
-                  <DoctorRegister />
-                </PublicRoute>
-              }
-            />
+            
             <Route
               path="/doctor-homepage"
               element={

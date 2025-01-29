@@ -1,7 +1,7 @@
 export const userMenu = [
   {
     name: "Home",
-    path: "/",
+    path: "/patient-homepage",
     icon: "fa-solid fa-house",
   },
   {
@@ -21,11 +21,10 @@ export const userMenu = [
   },
 ];
 
-// admin menu
-export const adminMenu = [
+export const doctorMenu = [
   {
     name: "Home",
-    path: "/",
+    path: "/doctor-homepage",
     icon: "fa-solid fa-house",
   },
 
