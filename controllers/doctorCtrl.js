@@ -1,5 +1,5 @@
 const doctorModel = require("../models/doctorModel.js");
-const bcrypt = require('bcrypt');
+const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const userModel = require("../models/userModels");
 const appointmentModel = require("../models/appointmentModel");
@@ -7,28 +7,32 @@ const moment = require("moment");
 const { registerController } = require("./userCtrl");
 
 // Login controller
-const doctorloginController = async (req, res) => { 
+const doctorloginController = async (req, res) => {
   try {
     const user = await doctorModel.findOne({ email: req.body.email });
     if (!user) {
-      return res.status(200).send({ message: "User not found", success: false });
+      return res
+        .status(200)
+        .send({ message: "User not found", success: false });
     }
     const isMatch = await bcrypt.compare(req.body.password, user.password);
     if (!isMatch) {
-      return res.status(200).send({ message: "Invalid Email or Password", success: false });
+      return res
+        .status(200)
+        .send({ message: "Invalid Email or Password", success: false });
     }
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
       expiresIn: "1d",
     });
-    res.status(200).send({ 
-      message: "Login Success", 
-      success: true, 
-      token, 
+    res.status(200).send({
+      message: "Login Success",
+      success: true,
+      token,
       user: {
         name: user.name,
         email: user.email,
         isDoctor: true, // ✅ Ensure this is included
-      }
+      },
     });
   } catch (error) {
     console.log(error);
@@ -39,12 +43,26 @@ const doctorloginController = async (req, res) => {
 // Doctor register
 const doctorregisterController = async (req, res) => {
   try {
-    const { email, password, name, phone, website, address, specialization, experience, feesPerConsultation, timings } =
-      req.body;
+    const {
+      email,
+      password,
+      name,
+      phone,
+      website,
+      address,
+      specialization,
+      experience,
+      feesPerConsultation,
+      timings,
+    } = req.body;
 
-    const exisitingDoctor = await doctorModel.findOne({ email: req.body.email });
+    const exisitingDoctor = await doctorModel.findOne({
+      email: req.body.email,
+    });
     if (exisitingDoctor) {
-      return res.status(200).send({ message: "Doctor Already Exists", success: false });
+      return res
+        .status(200)
+        .send({ message: "Doctor Already Exists", success: false });
     }
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
@@ -86,7 +104,7 @@ const doctorauthController = async (req, res) => {
 
     // Verify the token and decode the user data
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    
+
     // Find the doctor using the decoded user ID from the token
     const doctor = await doctorModel.findById(decoded.id).select("-password");
 
@@ -131,9 +149,6 @@ const getAllDoctorsController = async (req, res) => {
     });
   }
 };
-
-
-
 
 // Update doctor profile
 const updateProfileController = async (req, res) => {

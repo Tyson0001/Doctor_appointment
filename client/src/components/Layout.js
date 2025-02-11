@@ -17,7 +17,7 @@ const Layout = ({ children }) => {
     }
   }, []);
 
-  const user = useSelector(state => state.user);
+  const { user } = useSelector((state) => state.user);
 
   // Conditional Rendering of Sidebar Menu
   const SidebarMenu = userType === "doctor" ? doctorMenu : userMenu;
