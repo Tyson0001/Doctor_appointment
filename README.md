@@ -1,39 +1,48 @@
-﻿# Doctor_appointment
-📌 Overview
-A full-stack web application for booking doctor appointments online. Patients can search for doctors, book appointments, and manage their visits, while doctors can manage their schedules and view patient details. Built with the MERN stack (MongoDB, Express.js, React.js, Node.js) for a seamless, responsive, and secure user experience.
+# 🏥 Doctor Appointment System (MERN Stack)
 
-✨ Key Features
-👨‍⚕️ For Patients
-User Registration & Login (JWT Authentication)
+![MERN Stack](https://img.shields.io/badge/MERN-MongoDB%20Express%20React%20Node.js-blue) 
+![License](https://img.shields.io/badge/License-MIT-green)
 
-Search & Filter Doctors by specialization, availability, and ratings
+A full-stack web application for booking doctor appointments online. Patients can book appointments, doctors can manage schedules, and admins can oversee the platform.
 
-Book/Cancel Appointments with real-time availability
+## ✨ Features
 
-View Appointment History and upcoming visits
+### 👨‍⚕️ **Patients**
+- User authentication (Login/Signup with JWT).
+- Search doctors by specialization, availability, or name.
+- Book/cancel appointments with real-time updates.
+- View appointment history and doctor profiles.
 
-Profile Management (Update personal details)
+### ⚕️ **Doctors**
+- Doctor registration and profile management.
+- Set available time slots and working days.
+- Accept/reject appointments.
+- View patient details and appointment history.
 
-⚕️ For Doctors
-Doctor Registration & Profile Setup
+### 👨‍💼 **Admin**
+- Manage users (patients & doctors).
+- Approve/reject doctor registrations.
+- Analytics dashboard for appointments.
 
-Manage Availability (Set working hours & days)
+## 🛠️ Tech Stack
+| Category       | Technologies Used                     |
+|---------------|---------------------------------------|
+| **Frontend**  | React.js, Redux, TailwindCSS          |
+| **Backend**   | Node.js, Express.js                   |
+| **Database**  | MongoDB (Mongoose)                    |
+| **Auth**      | JWT (JSON Web Tokens)                 |
+| **Deployment**| Vercel (Frontend), Render (Backend)   |
 
-View & Confirm Appointments
+## 🚀 Installation
 
-Patient History & Records
+### Prerequisites
+- Node.js (v16+)
+- MongoDB Atlas (or local MongoDB)
+- Git
 
-🛠️ Admin Panel
-Manage Users (Patients & Doctors)
+### Steps to Run
 
-Approve/Reject Doctor Registrations
-
-Analytics Dashboard (Appointments, Revenue, etc.)
-🛠️ Tech Stack
-Frontend: React.js, Redux (State Management), TailwindCSS (Styling)
-
-Backend: Node.js, Express.js
-
-Database: MongoDB (Mongoose ODM)
-
-Authentication: JWT (JSON Web Tokens)
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/atanukayal/Doctor_appointment.git
+   cd Doctor_appointment
